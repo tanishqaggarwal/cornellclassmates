@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Cornell Classmates!</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="red" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href = "/" class="brand-logo">Cornell Classmates!</a>
+      <ul class="right hide-on-med-and-down">
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner" style = "height:90vh;">
+    <div class="container">
+      <br><br>
+      <h1 class="header center">{{ course_info.course_number }}: {{ course_info.class_title }} ({{ course_info.class_type }})</h1>
+      <h5 class="header center"><i>{{ course_info.class_times }}</i></h5>
+      <br />
+      <br />
+      <div class="row center">
+        <h6>Click on a classmate's name to find out more about them!</h6>
+        <table>
+          <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for member in class_members %}
+            <tr>
+              <td><a href = "/view/cornellian?email_address={{ member.email_address }}" class = "black-text">{{ member.first_name }} {{ member.last_name }} <i>(Class of {{ member.classof }})</i></a></td>
+              <td><a href = "mailto:{{member.email_address}}" class = "black-text"><u>{{ member.email_address }}</u></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <br />
+        <br />
+        <a id="add_yourself" href = "/new/cornellian?class_id={{ course_info.class_id }}" class="btn waves-effect waves-light red">Add Yourself To This Class</a>
+      </div>
+      <br><br>
+    </div>
+  </div>
+
+  <footer class="page-footer red darken-1">
+    <div class="footer-copyright">
+      <div class="container">
+      Created by <a class="white-text lighten-2" href="mailto:ta335@cornell.edu">Tanishq Aggarwal</a>, '21.
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script>
+
+  </body>
+</html>
