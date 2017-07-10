@@ -22,7 +22,7 @@ from google.appengine.ext import ndb
 import logging
 import urllib
 import traceback
-from datetime import datetime, timezone
+from datetime import datetime
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), 
                                        extensions=['jinja2.ext.autoescape'],
@@ -50,7 +50,7 @@ class Course(ndb.Model):
 class DBUpdate(webapp2.RequestHandler):
     def get(self):
         #To ensure this script cannot fuck shit up, it cannot run past a certain datetime
-        if datetime.now() > datetime(2017, 7, 10, 22, 30, 0, 0): # Jul 10 2017 6:30 PM EST (10:30 PM UTC)
+        if datetime.now() > datetime(2017, 7, 10, 22, 35, 0, 0): # Jul 10 2017 6:35 PM EST (10:35 PM UTC)
             course_data_path = os.path.join(os.path.dirname(__file__), 'sections_data.json')
             with open(course_data_path, 'r') as course_data_file:
                 course_data = json.loads(course_data_file.read())
