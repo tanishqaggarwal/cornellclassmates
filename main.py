@@ -220,7 +220,7 @@ class DeleteCornellian(webapp2.RequestHandler):
             email_address = self.request.get("email_address")
             class_id = self.request.get("class_id")
             passcode = self.request.get("passcode")
-            cornellian = Cornellian.query(Cornellian.email_address == email_address, Cornellian.passcode == passcode).get()
+            cornellian = Cornellian.query(ndb.AND(Cornellian.email_address == email_address, Cornellian.passcode == passcode)).get()
             if not cornellian:
                 raise Exception()
 

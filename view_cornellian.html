@@ -45,7 +45,7 @@
               <td><a href = "/view/class?class_id={{ course.class_id }}" class = "black-text">{{ course.course_number }}: {{ course.class_title }}</a></td>
               <td>{{ course.class_type }}</td>
               <td>{{ course.class_times }}</td>
-              <td><a href = "/delete/class?class_id={{ course.class_id }}&email_address={{ cornellian_info.email_address }}"><i class="material-icons">delete</i></a></td>
+              <td><a href = "/delete/class?class_id={{ course.class_id }}&email_address={{ cornellian_info.email_address }}" class = "red-text"><i class="material-icons">delete</i></a></td>
             </tr>
             {% endfor %}
           </tbody>

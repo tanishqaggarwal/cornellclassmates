@@ -60,11 +60,8 @@
   	  method: "POST",
   	  url: "/delete/cornellian",
   	  data: { 
-        class_id   : $("#class_id").val(),
-        classof   : $("#classof").val(),
-        first_name : $("#first_name").val(),
-        last_name  : $("#last_name").val(),
-        email_address : $("#email_address").val(),
+        class_id   : "{{ course_info.class_id }}",
+        email_address : "{{ cornellian_info.email_address }}",
         passcode      : $("#passcode").val(),
       },
   	  success: function(data) {
