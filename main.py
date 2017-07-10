@@ -102,6 +102,7 @@ class NewCornellian(webapp2.RequestHandler):
             cornellian = Cornellian.query(Cornellian.email_address == email_address).get()
             if cornellian:
                 cornellian.enrolled_classes.append(class_id)
+                cornellian.put()
                 return webapp2.Response("added cornellian")
 
             cornellian = Cornellian()
