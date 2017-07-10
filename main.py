@@ -110,7 +110,7 @@ class NewCornellian(webapp2.RequestHandler):
             cornellian.classof          = classof
             cornellian.email_address    = email_address
             cornellian.passcode         = passcode
-            cornellian.enrolled_classes = [class_id]
+            cornellian.enrolled_classes.append(class_id)
             cornellian.put()
 
             self.response.out.write("added cornellian")
