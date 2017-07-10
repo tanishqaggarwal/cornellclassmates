@@ -32,9 +32,9 @@
         <input type = "text" placeholder = "Course Timing (i.e. Mondays, Wednesdays, 7:30 PM - 10:30 PM)" id = "class_times">
         <select id = "class_type">
           <option value="" disabled selected>Choose class type</option>
-          <option value="Lecture">Lecture</option>
-          <option value="Lab">Lab</option>
-          <option value="Discussion">Discussion</option>
+          {% for class_type in class_types %}
+          <option value="{{ class_type }}">{{ class_type }}</option>
+          {% endfor %}
         </select>
       </div>
       <div class="row center">

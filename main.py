@@ -35,11 +35,12 @@ class Cornellian(ndb.Model):
     passcode      = ndb.StringProperty(required = True) #Passcode used by the Cornellian to delete themselves from the class, if necessary
     enrolled_classes = ndb.StringProperty(repeated = True)
 
+CLASS_TYPES = ['Lecture', 'Laboratory', 'Discussion', 'Seminar', 'Independent Study', 'Field Studies', 'Research', 'TA/Tutor Group', 'Studio', 'Clinical']
 class Course(ndb.Model):
     class_id  = ndb.StringProperty(required = True)
     course_number = ndb.StringProperty(required = True)
     class_title   = ndb.StringProperty(required = True)
-    class_type    = ndb.StringProperty(required = True, choices = ["Lecture", "Lab", "Discussion"])
+    class_type    = ndb.StringProperty(required = True, choices = CLASS_TYPES)
     class_times   = ndb.StringProperty(required = True)
     class_members = ndb.StringProperty(repeated = True) #email addresses of Cornellians
 
@@ -58,7 +59,7 @@ class MainHandler(webapp2.RequestHandler):
 class NewClass(webapp2.RequestHandler):
     def get(self):
         class_id = self.request.get("class_id")
-        self.response.out.write(JINJA_ENVIRONMENT.get_template("new_class.html").render({"class_id" : class_id}))
+        self.response.out.write(JINJA_ENVIRONMENT.get_template("new_class.html").render({"class_id" : class_id, "class_types" : CLASS_TYPES}))
     def post(self):
         try: 
             class_id = self.request.get("class_id")
