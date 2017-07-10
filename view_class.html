@@ -34,6 +34,7 @@
             <tr>
                 <th>Name</th>
                 <th>Email Address</th>
+                <th></th>
             </tr>
           </thead>
           <tbody>
@@ -41,6 +42,7 @@
             <tr>
               <td><a href = "/view/cornellian?email_address={{ member.email_address }}" class = "black-text">{{ member.first_name }} {{ member.last_name }} <i>(Class of {{ member.classof }})</i></a></td>
               <td><a href = "mailto:{{member.email_address}}" class = "black-text"><u>{{ member.email_address }}</u></a></td>
+              <td><a href = "/delete/cornellian?class_id={{ course_info.class_id }}&email_address={{ member.email_address }}"><i class="material-icons">delete</i></a></td>
             </tr>
             {% endfor %}
           </tbody>

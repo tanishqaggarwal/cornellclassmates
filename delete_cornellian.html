@@ -23,35 +23,17 @@
   <div class="section no-pad-bot" id="index-banner" style = "height:90vh;">
     <div class="container">
       <br><br>
-      <h1 class="header center">{{ cornellian_info.first_name }} {{ cornellian_info.last_name }}  <i>(Class of {{ cornellian_info.classof }})</i></h1>
-      <h5 class="header center"><a href = "mailto:{{cornellian_info.email_address}}" class = "black-text"><u>{{ cornellian_info.email_address }}</u></a></h5>
-      <br />
-      <br />
-      <br />
+      <h1 class="header center">Are you sure?</h1>
+      <h6 class='center'>You are removing yourself, <b>{{ cornellian_info.first_name }} {{ cornellian_info.last_name }} (Class of {{ cornellian_info.classof }})</b> from <b>{{ course_info.course_number }}: {{ course_info.class_title }}</b>.</h6>
+      <h6 class='center'>Enter your passcode to proceed. If you forget your passcode, contact Tanishq.</h6>
       <div class="row center">
-        <h6>Click on a course name to find out more about the course!</h6>
-        <table>
-          <thead>
-            <tr>
-                <th>Class Name</th>
-                <th>Class Type</th>
-                <th>Class Timing</th>
-                <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for course in enrolled_courses %}
-            <tr>
-              <td><a href = "/view/class?class_id={{ course.class_id }}" class = "black-text">{{ course.course_number }}: {{ course.class_title }}</a></td>
-              <td>{{ course.class_type }}</td>
-              <td>{{ course.class_times }}</td>
-              <td><a href = "/delete/class?class_id={{ course.class_id }}&email_address={{ cornellian_info.email_address }}"><i class="material-icons">delete</i></a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <input type = "password" placeholder = "Passcode" id = "passcode">
+      </div>
+      <div class="row center">
+        <a id="add_yourself" class="btn-large waves-effect waves-light red">Delete</a>
       </div>
       <br><br>
+
     </div>
   </div>
 
@@ -67,6 +49,35 @@
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script>
+
+  <script type = "text/javascript">
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+
+  $("#add_yourself").click(function() {
+  	$.ajax({
+  	  method: "POST",
+  	  url: "/delete/cornellian",
+  	  data: { 
+        class_id   : $("#class_id").val(),
+        classof   : $("#classof").val(),
+        first_name : $("#first_name").val(),
+        last_name  : $("#last_name").val(),
+        email_address : $("#email_address").val(),
+        passcode      : $("#passcode").val(),
+      },
+  	  success: function(data) {
+  	  	if (data == "removed class from cornellian") {
+  	  		window.location.replace("/view/cornellian?email_address=" + "{{ cornellian_info.email_address }}");
+  	  	}
+  	  	else {
+  	  		Materialize.toast("Oops, there was an error removing you from this class. Please try again, or contact Tanishq.", 2000);
+  	  	}
+  	  }
+  	});
+  });
+  </script>
 
   </body>
 </html>

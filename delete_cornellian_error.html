@@ -23,35 +23,13 @@
   <div class="section no-pad-bot" id="index-banner" style = "height:90vh;">
     <div class="container">
       <br><br>
-      <h1 class="header center">{{ cornellian_info.first_name }} {{ cornellian_info.last_name }}  <i>(Class of {{ cornellian_info.classof }})</i></h1>
-      <h5 class="header center"><a href = "mailto:{{cornellian_info.email_address}}" class = "black-text"><u>{{ cornellian_info.email_address }}</u></a></h5>
-      <br />
-      <br />
-      <br />
+      <h1 class="header center">Oops, looks like there's an error.</h1>
       <div class="row center">
-        <h6>Click on a course name to find out more about the course!</h6>
-        <table>
-          <thead>
-            <tr>
-                <th>Class Name</th>
-                <th>Class Type</th>
-                <th>Class Timing</th>
-                <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for course in enrolled_courses %}
-            <tr>
-              <td><a href = "/view/class?class_id={{ course.class_id }}" class = "black-text">{{ course.course_number }}: {{ course.class_title }}</a></td>
-              <td>{{ course.class_type }}</td>
-              <td>{{ course.class_times }}</td>
-              <td><a href = "/delete/class?class_id={{ course.class_id }}&email_address={{ cornellian_info.email_address }}"><i class="material-icons">delete</i></a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <h6>We can't find this Cornellian.</h6>
+        <h6>Try again from the <a href = "/">home page</a>.</h6>
       </div>
       <br><br>
+
     </div>
   </div>
 

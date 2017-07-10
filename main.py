@@ -182,10 +182,124 @@ class ViewCornellian(webapp2.RequestHandler):
             logging.error(traceback.print_exc(e))
             self.response.out.write(JINJA_ENVIRONMENT.get_template("view_cornellian_error.html").render())
 
+class DeleteCornellian(webapp2.RequestHandler):
+    def get(self):
+        try:
+            email_address = self.request.get("email_address")
+            class_id = self.request.get("class_id")
+            cornellian = Cornellian.query(Cornellian.email_address == email_address).get()
+            if not cornellian:
+                raise Exception()
+
+            course = Course.query(Course.class_id == class_id).get()
+            if not course:
+                raise Exception()
+
+            cornellian_info = {
+                "first_name"               : cornellian.first_name,
+                "last_name"                : cornellian.last_name,
+                "email_address"            : cornellian.email_address,
+                "classof"                  : cornellian.classof,
+            }
+
+            course_info = {
+                "class_id"      : course.class_id,
+                "course_number" : course.course_number,
+                "class_title"   : course.class_title,
+                "class_type"    : course.class_type,
+                "class_times"   : course.class_times,
+            }
+                
+            self.response.out.write(JINJA_ENVIRONMENT.get_template("delete_cornellian.html").render({"course_info" : course_info, "cornellian_info" : cornellian_info}))
+        except Exception as e:
+            logging.error(traceback.print_exc(e))
+            self.response.out.write(JINJA_ENVIRONMENT.get_template("delete_cornellian_error.html").render())
+    
+    def post(self):
+        try:
+            email_address = self.request.get("email_address")
+            class_id = self.request.get("class_id")
+            passcode = self.request.get("passcode")
+            cornellian = Cornellian.query(Cornellian.email_address == email_address, Cornellian.passcode == passcode).get()
+            if not cornellian:
+                raise Exception()
+
+            course = Course.query(Course.class_id == class_id).get()
+            if not course:
+                raise Exception()
+
+            cornellian.enrolled_classes.remove(class_id)
+            cornellian.put()
+            course.class_members.remove(email_address)
+            course.put()
+                
+            self.response.out.write("removed cornellian from class")
+        except Exception as e:
+            logging.error(traceback.print_exc(e))
+            self.response.out.write("error")
+
+class DeleteClass(webapp2.RequestHandler):
+    def get(self):
+        try:
+            email_address = self.request.get("email_address")
+            class_id = self.request.get("class_id")
+            cornellian = Cornellian.query(Cornellian.email_address == email_address).get()
+            if not cornellian:
+                raise Exception()
+
+            course = Course.query(Course.class_id == class_id).get()
+            if not course:
+                raise Exception()
+
+            cornellian_info = {
+                "first_name"               : cornellian.first_name,
+                "last_name"                : cornellian.last_name,
+                "email_address"            : cornellian.email_address,
+                "classof"                  : cornellian.classof,
+            }
+
+            course_info = {
+                "class_id"      : course.class_id,
+                "course_number" : course.course_number,
+                "class_title"   : course.class_title,
+                "class_type"    : course.class_type,
+                "class_times"   : course.class_times,
+            }
+                
+            self.response.out.write(JINJA_ENVIRONMENT.get_template("delete_class.html").render({"course_info" : course_info, "cornellian_info" : cornellian_info}))
+        except Exception as e:
+            logging.error(traceback.print_exc(e))
+            self.response.out.write(JINJA_ENVIRONMENT.get_template("delete_class_error.html").render())
+
+    def post(self):
+        try:
+            email_address = self.request.get("email_address")
+            class_id = self.request.get("class_id")
+            passcode = self.request.get("passcode")
+            cornellian = Cornellian.query(Cornellian.email_address == email_address, Cornellian.passcode == passcode).get()
+            if not cornellian:
+                raise Exception()
+
+            course = Course.query(Course.class_id == class_id).get()
+            if not course:
+                raise Exception()
+
+            cornellian.enrolled_classes.remove(class_id)
+            cornellian.put()
+            course.class_members.remove(email_address)
+            course.put()
+                
+            self.response.out.write("removed class from cornellian")
+        except Exception as e:
+            logging.error(traceback.print_exc(e))
+            self.response.out.write("error")
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/new/class', NewClass),
     ('/new/cornellian', NewCornellian),
     ('/view/class', ViewClass),
     ('/view/cornellian', ViewCornellian),
+    ('/delete/cornellian', DeleteCornellian),
+    ('/delete/class', DeleteClass),
 ], debug=True)
