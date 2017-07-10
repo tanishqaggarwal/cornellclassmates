@@ -1,9 +1,10 @@
-#Python script to scrape all roster data from the Cornell API.
+#Python script to scrape all roster data from the Cornell API that is relevant to the CornellClassmates app.
 import requests
 import json
 import re
 
-def translate_days(original_list): #To translate the pattern into something human-readable
+#Auxiliary function: to translate the time patterns (MWF) into their full forms
+def translate_days(original_list):
 	translation_key = {
 		"M" : "Monday",
 		"T" : "Tuesday",
@@ -19,15 +20,12 @@ def translate_days(original_list): #To translate the pattern into something huma
 	return new_list
 
 component_types = ["Lecture", "Lab", "Discussion"]
-class_ids = []
-duplicated_ids = []
 
 url = 'https://classes.cornell.edu/api/2.0/config/subjects.json'
 payload = {'roster': 'FA17'}
 
-# GET with params in URL
+#Scrape the subject data
 r = requests.get(url, params=payload)
-
 
 filtered = json.loads(r.text)
 
@@ -37,6 +35,8 @@ for subject in filtered["data"]["subjects"]:
 
 print "The total number of subjects is " + str(len(subjectkeys))
 
+sections_data = []
+##Now that you've got subject data, scrape each and every class per subject
 subjectcounter = 0
 for subject in subjectkeys:
 	url = 'https://classes.cornell.edu/api/2.0/search/classes.json'
@@ -44,11 +44,14 @@ for subject in subjectkeys:
 	r = requests.get(url, params=payload)
 	filtered = json.loads(r.text)
 
+	subject_sections_data = []
+	#From each class, scrape the sections
 	print "The total number of classes in " + subject + " is " + str(len(filtered["data"]["classes"]))
 	for course in filtered["data"]["classes"]:
 		course_number = subject + course["catalogNbr"]
 		class_title = course["titleLong"]
 
+		#Scrape the relevant fields from each section: class ID, class type, meeting times
 		course_sections_data = []
 		for enroll_group in course["enrollGroups"]:
 			for section in enroll_group["classSections"]:
@@ -71,20 +74,21 @@ for subject in subjectkeys:
 				section_data["class_times"] = "; ".join(meeting_strings)
 				course_sections_data.append(section_data)
 
-		for section in course_sections_data:
+		#Modify the section entries to include the course number and class title
+		for idx, section in enumerate(course_sections_data):
 			section["course_number"] = course_number
 			section["class_title"]   = class_title
 
-			while section_data["class_id"] in class_ids:
-				section_data["class_id"] += "-0"
-			class_ids.append(section_data["class_id"])
+			subject_sections_data.append(section)
 
-			#Now write this data to a file
-			jsonfile = open("scraped_data/" + section["class_id"] + ".json", "w")
-			jsonfile.write(json.dumps(section))
-			jsonfile.close()
+	for section in subject_sections_data:
+		sections_data.append(section)
 
 	subjectcounter += 1
 	print "Subject #" + str(subjectcounter) + " (" + subject + ") completed (of " + str(len(subjectkeys)) + ")"
 
-print "Types of classes: " + str(component_types)
+#print "Component Types: " + str(component_types)
+
+jsonfile = open("sections_data.json", "w")
+jsonfile.write(json.dumps(sections_data))
+jsonfile.close()
