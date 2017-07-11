@@ -65,7 +65,7 @@
         passcode      : $("#passcode").val(),
       },
   	  success: function(data) {
-  	  	if (data == "removed class from cornellian") {
+  	  	if (data == "removed cornellian from class") {
   	  		window.location.replace("/view/cornellian?email_address=" + "{{ cornellian_info.email_address }}");
   	  	}
   	  	else {

@@ -26,7 +26,8 @@
       <h1 class="header center">Add yourself!</h1>
       <h6 class='center'>All fields except the email address are optional, if you've added yourself to a class before.</h6>
       <div class="row center">
-        <input type = "text" value = "{{ class_id }}" id = "class_id">
+        <input type = "text" value = "{{ class_id }}" id = "class_id" disabled>
+        <input type = "email" placeholder = "Your Cornell Email Address" id = "email_address" pattern = "^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(cornell)\.edu$" class = "validate">
         <input type = "text" placeholder = "Your First Name" id = "first_name">
         <input type = "text" placeholder = "Your Last Name" id = "last_name">
         <select id = "classof">
@@ -36,7 +37,6 @@
           <option value="2020">2020</option>
           <option value="2021">2021</option>
         </select>
-        <input type = "email" placeholder = "Your Cornell Email Address" id = "email_address" pattern = "^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(cornell)\.edu$" class = "validate">
         <input type = "password" placeholder = "Add a passcode, so you can delete yourself from the class if necessary" id = "passcode">
       </div>
       <div class="row center">
@@ -66,26 +66,31 @@
   });
 
   $("#add_yourself").click(function() {
-  	$.ajax({
-  	  method: "POST",
-  	  url: "/new/cornellian",
-  	  data: { 
-        class_id   : $("#class_id").val(),
-        classof   : $("#classof").val(),
-        first_name : $("#first_name").val(),
-        last_name  : $("#last_name").val(),
-        email_address : $("#email_address").val(),
-        passcode      : $("#passcode").val(),
-      },
-  	  success: function(data) {
-  	  	if (data == "added cornellian") {
-  	  		window.location.replace("/view/class?class_id=" + $("#class_id").val());
-  	  	}
-  	  	else {
-  	  		Materialize.toast("Oops, there was an error adding you to this class. Please try again, or contact Tanishq.", 2000);
-  	  	}
-  	  }
-  	});
+    if ($("#email_address").hasClass("invalid")) {
+      Materialize.toast("Fix your email address! It needs to be a Cornell one.", 2000);
+    }
+    else {
+      $.ajax({
+        method: "POST",
+        url: "/new/cornellian",
+        data: { 
+          class_id   : $("#class_id").val(),
+          classof   : $("#classof").val(),
+          first_name : $("#first_name").val(),
+          last_name  : $("#last_name").val(),
+          email_address : $("#email_address").val(),
+          passcode      : $("#passcode").val(),
+        },
+        success: function(data) {
+          if (data == "added cornellian") {
+            window.location.replace("/view/class?class_id=" + $("#class_id").val());
+          }
+          else {
+            Materialize.toast("Oops, there was an error adding you to this class. Please try again, or contact Tanishq.", 2000);
+          }
+        }
+      });
+    }
   });
   </script>
 

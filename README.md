@@ -8,7 +8,7 @@ Simply download this repository, add it under the App Engine SDK, and you should
 
 ## DISCLAIMER
 
-This app, in its current form, is very insecure. Passwords are not hashed, and relies on the Cornell community to not fuck it up. By using this service, you agree to "Fair Use", which means that you will not diminish the utility of the service for your own personal gain (whose definition includes, but is not limited to, pranking).
+This app, in its current form, is very insecure. Passwords are not hashed, the system is supremely vulernable to form injection, and relies on the Cornell community to not fuck it up. By using this service, you agree to "Fair Use", which means that you will not diminish the utility of the service for your own personal gain (whose definition includes, but is not limited to, any fun you may find in pranks).
 
 ## License
 
