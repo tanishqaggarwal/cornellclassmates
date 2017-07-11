@@ -18,7 +18,7 @@ import webapp2
 import jinja2
 import os
 import json
-from google.appengine.ext import ndb
+from google.appengine.ext import ndb, deferred
 import logging
 import urllib
 import traceback
@@ -45,28 +45,6 @@ class Course(ndb.Model):
     class_type    = ndb.StringProperty(required = True, choices = CLASS_TYPES)
     class_times   = ndb.StringProperty(required = True)
     class_members = ndb.StringProperty(repeated = True) #email addresses of Cornellians
-
-#Programmatically inserts all of the courses that were scraped from the Cornell Roster API
-class DBUpdate(webapp2.RequestHandler):
-    def get(self):
-        #To ensure this script cannot fuck shit up, it cannot run past a certain datetime
-        if datetime.now() > datetime(2017, 7, 10, 22, 35, 0, 0): # Jul 10 2017 6:35 PM EST (10:35 PM UTC)
-            course_data_path = os.path.join(os.path.dirname(__file__), 'sections_data.json')
-            with open(course_data_path, 'r') as course_data_file:
-                course_data = json.loads(course_data_file.read())
-
-                course_list = []
-                for section in course_data:
-                    course = Course()
-                    course.class_id      = section["class_id"]
-                    course.course_number = section["course_number"]
-                    course.class_title   = section["class_title"]
-                    course.class_type    = section["class_type"]
-                    course.class_times   = section["class_times"]
-                    course_list.append(course)
-                ndb.put_multi(course_list)
-
-            self.response.out.write(JINJA_ENVIRONMENT.get_template("dbupdate.html").render())
 
 ##HANDLERS
 class MainHandler(webapp2.RequestHandler):
@@ -322,7 +300,6 @@ class DeleteClass(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/dbupdate', DBUpdate),
     ('/new/class', NewClass),
     ('/new/cornellian', NewCornellian),
     ('/view/class', ViewClass),

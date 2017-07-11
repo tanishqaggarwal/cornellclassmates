@@ -13,6 +13,13 @@ handlers:
   script: main.app
 #  secure: always
 
+- url: /_ah/queue/deferred
+  script: google.appengine.ext.deferred.deferred.application
+  login: admin
+
+builtins:
+- deferred: on
+
 libraries:
 - name: jinja2
   version: "latest"

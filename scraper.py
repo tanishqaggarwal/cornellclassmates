@@ -21,11 +21,8 @@ def translate_days(original_list):
 
 component_types = ["Lecture", "Lab", "Discussion"]
 
-url = 'https://classes.cornell.edu/api/2.0/config/subjects.json'
-payload = {'roster': 'FA17'}
-
 #Scrape the subject data
-r = requests.get(url, params=payload)
+r = requests.get('https://classes.cornell.edu/api/2.0/config/subjects.json', {'roster': 'FA17'})
 
 filtered = json.loads(r.text)
 
@@ -39,9 +36,7 @@ sections_data = []
 ##Now that you've got subject data, scrape each and every class per subject
 subjectcounter = 0
 for subject in subjectkeys:
-	url = 'https://classes.cornell.edu/api/2.0/search/classes.json'
-	payload = {'roster': 'FA17', 'subject':subject}
-	r = requests.get(url, params=payload)
+	r = requests.get('https://classes.cornell.edu/api/2.0/search/classes.json', {'roster': 'FA17', 'subject':subject})
 	filtered = json.loads(r.text)
 
 	subject_sections_data = []
@@ -69,6 +64,9 @@ for subject in subjectkeys:
 					time_end     = meeting["timeEnd"]
 					meeting_days = ", ".join(translate_days(re.findall('[A-Z][^A-Z]*', meeting["pattern"]))) #Converts "MWF" to "Monday, Wednesday, Friday"
 					meeting_string = meeting_days + " " + time_start + " to " + time_end
+
+					if meeting_string == " to ":
+						meeting_string = "Time: TBA or Non-Periodic"
 					meeting_strings.append(meeting_string)
 				
 				section_data["class_times"] = "; ".join(meeting_strings)
