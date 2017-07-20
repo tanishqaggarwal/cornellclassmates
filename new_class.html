@@ -20,7 +20,7 @@
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
-  <div class="section no-pad-bot" id="index-banner" style = "height:90vh;">
+  <div class="section no-pad-bot" id="index-banner" style = "height:100vh;">
     <div class="container">
       <br><br>
       <h1 class="header center">Looks like that class doesn't exist, yet...</h1>
@@ -48,11 +48,11 @@
   <footer class="page-footer red darken-1 hide-on-med-and-down">
     <div class="footer-copyright">
       <div class="container">
-      Created by <a class="white-text lighten-2" href="mailto:ta335@cornell.edu">Tanishq Aggarwal</a>, '21.
+      Created by <a class="white-text lighten-2" href="mailto:ta335@cornell.edu">Tanishq Aggarwal</a> '21.
       </div>
     </div>
   </footer>
-</body>
+
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -64,25 +64,25 @@
   });
 
   $("#add_class").click(function() {
-  	$.ajax({
-  	  method: "POST",
-  	  url: "/new/class",
-  	  data: { 
+    $.ajax({
+      method: "POST",
+      url: "/new/class",
+      data: { 
         class_id      : $("#class_id").val(),
         course_number : $("#course_number").val(),
         class_title   : $("#class_title").val(),
         class_times   : $("#class_times").val(),
         class_type    : $("#class_type").val(),
       },
-  	  success: function(data) {
-  	  	if (data == "added class") {
-  	  		window.location.replace("/view/class?class_id=" + $("#class_id").val());
-  	  	}
-  	  	else {
-  	  		Materialize.toast("Oops, there was an error adding this class. Please try again, or contact Tanishq.", 2000);
-  	  	}
-  	  }
-  	});
+      success: function(data) {
+        if (data == "added class") {
+          window.location.replace("/view/class?class_id=" + $("#class_id").val());
+        }
+        else {
+          Materialize.toast("Oops, there was an error adding this class. Please try again, or contact Tanishq.", 2000);
+        }
+      }
+    });
   });
   </script>
 
