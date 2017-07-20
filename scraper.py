@@ -66,7 +66,7 @@ for subject in subjectkeys:
 					meeting_string = meeting_days + " " + time_start + " to " + time_end
 
 					if meeting_string == " to ":
-						meeting_string = "Time: TBA or Non-Periodic"
+						meeting_string = "Class Timing TBA"
 					meeting_strings.append(meeting_string)
 				
 				section_data["class_times"] = "; ".join(meeting_strings)

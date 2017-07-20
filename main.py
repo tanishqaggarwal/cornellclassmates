@@ -45,6 +45,50 @@ class Course(ndb.Model):
     class_type    = ndb.StringProperty(required = True, choices = CLASS_TYPES)
     class_times   = ndb.StringProperty(required = True)
     class_members = ndb.StringProperty(repeated = True) #email addresses of Cornellians
+    class_member_count = ndb.ComputedProperty(lambda self: len(self.class_members))
+
+##DB Cleanup
+class FixTimesDB(webapp2.RequestHandler):
+    def get(self):
+        to_courses = Course.query(Course.class_times == "  to ").fetch()
+        blank_courses = Course.query(Course.class_times == "").fetch()
+        
+        to_edit = []
+        for course in to_courses:
+            course.class_times = "Class Timing TBA"
+            to_edit.append(course)
+        for course in blank_courses:
+            course.class_times = "Class Timing TBA"
+            to_edit.append(course)
+        ndb.put_multi(to_edit)
+
+        self.response.out.write("done")
+
+from mapreduce import base_handler
+from mapreduce import mapreduce_pipeline
+
+def put_entity(entity):
+    logging.info("I tried")
+    yield entity.put()
+
+class PutEntitiesPipeline(base_handler.PipelineBase):
+    def run(self):
+        logging.info("I tried pipeline")
+        yield mapreduce_pipeline.MapPipeline(
+                "Put all entities to enable counter", 
+                "main.put_entity", 
+                "mapreduce.input_readers.DatastoreInputReader", 
+                params={
+                    "entity_kind": 'main.Course',
+                },
+                shards=5)
+
+class FixMemberCountDB(webapp2.RequestHandler):
+    def get(self):
+        pipeline = PutEntitiesPipeline()
+        logging.info("I tried 2")
+        pipeline.start()
+        logging.info("I tried 3")
 
 ##HANDLERS
 class MainHandler(webapp2.RequestHandler):
@@ -300,6 +344,8 @@ class DeleteClass(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
+    ('/admin/fix_times', FixTimesDB),
+    ('/admin/fix_member_count', FixMemberCountDB),
     ('/new/class', NewClass),
     ('/new/cornellian', NewCornellian),
     ('/view/class', ViewClass),

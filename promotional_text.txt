@@ -1,0 +1,10 @@
+Hi guys,
+
+I'd like to introduce Cornell Classmates, a quick and easy way to find your classmates at Cornell! To get started, head over to http://cornellclassmates.appspot.com
+
+Disclaimers:
+1) When you get to the point where you're entering a passcode, put in something entirely different from what you normally use, because I can see your passcode. I didn't bother hashing these passcodes because it makes it so much easier for me to just give it back to you (i.e. I don't have to code an entire password reset system.)
+2) I didn't put too much effort into this project. As such, the security is weaker than what I generally design for, because that means I have to code less. Resultantly, this system is vulnerable to form injection/DDoSing. If you're using the system, you agree to do it in a way that doesn't adversely affect the utility of the service to the general Cornell community.
+3) Feel free to contribute to this project on GitHub! Find it at github.com/tanishqaggarwal/cornellclassmates
+
+I hope you all find this useful! If you have any issues, feel free to contact me at ta335@cornell.edu (I have a link to my email at the bottom of the website, too)
